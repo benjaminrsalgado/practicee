@@ -10,43 +10,72 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
+        ZStack{
+            LinearGradient(
+                gradient: Gradient(colors: [Color.blue, Color.white]),
+                startPoint: .bottom,
+                endPoint: .top
+            )
+            .ignoresSafeArea()
+            
+            VStack{
+                Text("Catalogo de Prodcutos")
+                    .font(.title)
+                    .bold()
+                ScrollView{
+                    productos()
+                }
+            }
         
-        
-    }
-}
-
-struct Tarea: Identifiable{
-    let id = UUID()
-    let titulo: String
-    var completado: Bool
-}
-
-class ViewModel: ObservableObject{
-    @Published var tareas: [Tarea] = [
-           Tarea(titulo: "uveg", completado: true),
-           Tarea(titulo: "swift", completado: true),
-           Tarea(titulo: "SwiftUI", completado: true),
-           Tarea(titulo: "notion", completado: true),
-           Tarea(titulo: "emprender", completado: true)
-       ]
-    
-
-}
-
-struct VistaPrincial: View{
-    @StateObject var paste = ViewModel()
-    var body: some View{
-        List(paste.tareas){ pas in
-            Text(pas.titulo)
-            Button {
-                    pas.completado.toggle() // ✅ Aquí sí funciona directo
-                   } label: {
-                       Image(systemName: pas.completado ? "checkmark.circle.fill" : "circle")
-                   }
-            pas.completado.description
         }
+        
+        
     }
 }
+
+struct Product: Identifiable{
+    let id = UUID()
+    var name: String
+    var price: String
+    var imageName: String
+    var imageURL: String
+}
+
+
+struct productos: View{
+    var productosLista: [Product] = [
+        Product(name: "iphone 12", price: "$10,000", imageName: "celular", imageURL: "pepe"),
+        Product(name: "iphone 13", price: "$19,000", imageName: "celular", imageURL: "he"),
+        Product(name: "iphone 14", price: "$40,000", imageName: "celular", imageURL: "https")
+    ]
+    var body: some View{
+
+    }
+}
+
+struct ProductRowView: View{
+    let product = Product
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(product.imageName)
+                .resizable()
+                .scaledToFit()
+                .frame(height: 80)
+                .cornerRadius(8)
+
+            VStack(alignment: .leading) {
+                Text(product.name).font(.headline)
+                Text(product.price).foregroundColor(.secondary)
+            }
+
+            Spacer()
+        }
+        .padding(.vertical, 8)
+    }
+}
+}
+
+
 
 #Preview {
     ContentView()
