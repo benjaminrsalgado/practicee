@@ -49,12 +49,13 @@ struct productos: View{
         Product(name: "iphone 14", price: "$40,000", imageName: "celular", imageURL: "https")
     ]
     var body: some View{
-
+        ForEach(productosLista){ productos in
+            ProductRowView(product: productos) //Se usa product de la condicional en ProductRowView
     }
 }
 
 struct ProductRowView: View{
-    let product = Product
+    let product : Product // se guarda la struct que tiene Identifiable 
     var body: some View {
         HStack(spacing: 12) {
             Image(product.imageName)
