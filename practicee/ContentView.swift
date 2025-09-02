@@ -1,82 +1,51 @@
-//
-//  ContentView.swift
-//  practicee
-//
-//  Created by Benjamin Rojo on 26/08/25.
-//
-
 import SwiftUI
 
-
 struct ContentView: View {
+    let numbers = 1...12
+
     var body: some View {
-        ZStack{
-            LinearGradient(
-                gradient: Gradient(colors: [Color.blue, Color.white]),
-                startPoint: .bottom,
-                endPoint: .top
-            )
-            .ignoresSafeArea()
-            
-            VStack{
-                Text("Catalogo de Prodcutos")
-                    .font(.title)
-                    .bold()
-                ScrollView{
-                    productos()
+        ScrollView {
+            VStack(spacing: 30) {
+                
+                // 1️⃣ FLEXIBLE → se ajusta al ancho disponible
+                Text("Flexible (se reparten el espacio)").bold()
+                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
+                    ForEach(numbers, id: \.self) { num in
+                        Text("Item \(num)")
+                            .frame(height: 60)
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue.opacity(0.3))
+                            .cornerRadius(8)
+                    }
+                }
+                
+                // 2️⃣ FIXED → siempre mide lo mismo
+                Text("Fixed (ancho fijo de 100)").bold()
+                LazyVGrid(columns: [GridItem(.fixed(100)), GridItem(.fixed(100))]) {
+                    ForEach(numbers, id: \.self) { num in
+                        Text("Item \(num)")
+                            .frame(width: 100, height: 60)
+                            .background(Color.green.opacity(0.3))
+                            .cornerRadius(8)
+                    }
+                }
+                
+                // 3️⃣ ADAPTIVE → se mete el máximo posible
+                Text("Adaptive (mínimo 80)").bold()
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]) {
+                    ForEach(numbers, id: \.self) { num in
+                        Text("Item \(num)")
+                            .frame(height: 60)
+                            .frame(maxWidth: .infinity)
+                            .background(Color.purple.opacity(0.3))
+                            .cornerRadius(8)
+                    }
                 }
             }
-        
+            .padding()
         }
-        
-        
     }
 }
-
-struct Product: Identifiable{
-    let id = UUID()
-    var name: String
-    var price: String
-    var imageName: String
-    var imageURL: String
-}
-
-
-struct productos: View{
-    var productosLista: [Product] = [
-        Product(name: "iphone 12", price: "$10,000", imageName: "celular", imageURL: "pepe"),
-        Product(name: "iphone 13", price: "$19,000", imageName: "celular", imageURL: "he"),
-        Product(name: "iphone 14", price: "$40,000", imageName: "celular", imageURL: "https")
-    ]
-    var body: some View{
-        ForEach(productosLista){ productos in
-            ProductRowView(product: productos) //Se usa product de la condicional en ProductRowView
-    }
-}
-
-struct ProductRowView: View{
-    let product : Product // se guarda la struct que tiene Identifiable 
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(product.imageName)
-                .resizable()
-                .scaledToFit()
-                .frame(height: 80)
-                .cornerRadius(8)
-
-            VStack(alignment: .leading) {
-                Text(product.name).font(.headline)
-                Text(product.price).foregroundColor(.secondary)
-            }
-
-            Spacer()
-        }
-        .padding(.vertical, 8)
-    }
-}
-}
-
-
 
 #Preview {
     ContentView()
