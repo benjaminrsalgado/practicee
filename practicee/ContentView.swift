@@ -1,45 +1,64 @@
 import SwiftUI
 
 struct ContentView: View {
-    let numbers = 1...12
+    var body: some View{
+        ColumnGridExample()
+        RowGridExample()
+    }
+}
+
+
+// COLUMNAS 2, LAZYVGRID
+struct ColumnGridExample: View {
+    // 1️⃣ Datos: una lista de emojis de frutas
+    let fruits = ["🍎", "🍌", "🍇", "🍓", "🍍", "🥝", "🍒", "🍑", "concha", "viernes", "22"]
+
+    // 2️⃣ Definimos el layout: 2 columnas
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 30) {
-                
-                // 1️⃣ FLEXIBLE → se ajusta al ancho disponible
-                Text("Flexible (se reparten el espacio)").bold()
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
-                    ForEach(numbers, id: \.self) { num in
-                        Text("Item \(num)")
-                            .frame(height: 60)
-                            .frame(maxWidth: .infinity)
-                            .background(Color.blue.opacity(0.3))
-                            .cornerRadius(8)
-                    }
+        ScrollView(.vertical) { // 3️⃣ Scroll hacia abajo
+            LazyVGrid(columns: columns, spacing: 20) { // 4️⃣ Rejilla con columnas
+                ForEach(fruits, id: \.self) { fruit in // 5️⃣ Recorremos los datos
+                    Text(fruit)                         // 6️⃣ Mostramos cada fruta
+                        .font(.system(size: 40))        // Tamaño de fuente grande
+                        .frame(width: 80, height: 80)   // Tamaño del cuadro
+                        .background(Color.yellow.opacity(0.3)) // Fondo amarillo suave
+                        .cornerRadius(12)               // Bordes redondeados
                 }
-                
-                // 2️⃣ FIXED → siempre mide lo mismo
-                Text("Fixed (ancho fijo de 100)").bold()
-                LazyVGrid(columns: [GridItem(.fixed(100)), GridItem(.fixed(100))]) {
-                    ForEach(numbers, id: \.self) { num in
-                        Text("Item \(num)")
-                            .frame(width: 100, height: 60)
-                            .background(Color.green.opacity(0.3))
-                            .cornerRadius(8)
-                    }
-                }
-                
-                // 3️⃣ ADAPTIVE → se mete el máximo posible
-                Text("Adaptive (mínimo 80)").bold()
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]) {
-                    ForEach(numbers, id: \.self) { num in
-                        Text("Item \(num)")
-                            .frame(height: 60)
-                            .frame(maxWidth: .infinity)
-                            .background(Color.purple.opacity(0.3))
-                            .cornerRadius(8)
-                    }
+            }
+            .padding()
+        }
+    }
+}
+
+// FILAS LAZYHGRID
+
+struct RowGridExample: View {
+    // 1️⃣ Datos: lista de emojis de frutas
+    let fruits = ["🍎", "🍌", "🍇", "🍓", "🍍", "🥝", "🍒", "🍑","hola", "pepe", "juan", "victor", "manzo", "22"]
+
+    // 2️⃣ Definimos el layout: 2 filas
+    let rows = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+
+    ]
+
+    var body: some View {
+        ScrollView(.horizontal) { // 3️⃣ Scroll hacia la derecha
+            LazyHGrid(rows: rows, spacing: 20) { // 4️⃣ Rejilla con filas
+                ForEach(fruits, id: \.self) { fruit in // 5️⃣ Recorremos los datos
+                    Text(fruit)                         // 6️⃣ Mostramos cada fruta
+                        .font(.system(size: 40))        // Tamaño grande
+                        .frame(width: 80, height: 80)   // Cuadro
+                        .background(Color.green.opacity(0.3)) // Fondo verde suave
+                        .cornerRadius(12)
                 }
             }
             .padding()
