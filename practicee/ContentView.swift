@@ -4,6 +4,8 @@ struct ContentView: View {
     var body: some View{
         ColumnGridExample()
         RowGridExample()
+        AdaptiveGridExample()
+        SpacingGridExample()
     }
 }
 
@@ -58,6 +60,60 @@ struct RowGridExample: View {
                         .font(.system(size: 40))        // Tamaño grande
                         .frame(width: 80, height: 80)   // Cuadro
                         .background(Color.green.opacity(0.3)) // Fondo verde suave
+                        .cornerRadius(12)
+                }
+            }
+            .padding()
+        }
+    }
+}
+
+//LAS COLUMNAS SE ADAPTAN AL TAMAÑO DE LA PANTALLA
+struct AdaptiveGridExample: View {
+    // Datos
+    let fruits = ["🍎", "🍌", "🍇", "🍓", "🍍", "🥝", "🍒", "🍑", "🥭", "🍊"]
+
+    // Layout con adaptive
+    let columns = [
+        GridItem(.adaptive(minimum: 80)) // Cada celda mide al menos 80 puntos
+    ]
+
+    var body: some View {
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 20) { // Grid vertical
+                ForEach(fruits, id: \.self) { fruit in
+                    Text(fruit)
+                        .font(.system(size: 40))
+                        .frame(width: 80, height: 80)
+                        .background(Color.blue.opacity(0.3))
+                        .cornerRadius(12)
+                }
+            }
+            .padding()
+        }
+    }
+}
+
+// ESPACIO ENTRE LAS COLUMNAS
+struct SpacingGridExample: View {
+    // Datos
+    let fruits = ["🍎", "🍌", "🍇", "🍓", "🍍", "🥝"]
+
+    // Layout con spacing distinto
+    let columns = [
+        GridItem(.flexible(), spacing: 20), // Columna 1 → poco espacio
+        GridItem(.flexible(), spacing: 20),
+        GridItem(.flexible(), spacing: 20)// Columna 2 → mucho espacio
+    ]
+
+    var body: some View {
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 40) { // Espacio entre FILAS
+                ForEach(fruits, id: \.self) { fruit in
+                    Text(fruit)
+                        .font(.system(size: 40))
+                        .frame(width: 80, height: 80)
+                        .background(Color.orange.opacity(0.3))
                         .cornerRadius(12)
                 }
             }
